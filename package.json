@@ -1,0 +1,24 @@
+{
+  "name": "afex-e2e",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:ui": "cucumber-js",
+    "test:api": "playwright test",
+    "report:playwright": "npx playwright show-report",
+    "report:cucumber": "start reports/cucumber-report.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.5.0",
+    "@faker-js/faker": "^10.2.0",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.3",
+    "allure-playwright": "^3.4.3",
+    "playwright-html-reporter": "^0.1.11",
+    "ts-node": "^10.9.2"
+  }
+}
