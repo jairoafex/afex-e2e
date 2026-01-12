@@ -34,12 +34,12 @@ jobs:
     runs-on: ubuntu-latest
 
     # ✅ Variables de entorno a nivel de job
-  env:
-    URL_TRANSFER_API: ${{ secrets.URL_TRANSFER_API }}
-    API_AUTH_TOKEN: ${{ secrets.API_AUTH_TOKEN }}
-    BRANCH_CODE: ${{ secrets.BRANCH_CODE }}
-    CLIENT_CORPORATE_CODE: ${{ secrets.CLIENT_CORPORATE_CODE }}
-    USER_ID: ${{ secrets.USER_ID }}
+env:
+  URL_TRANSFER_API: ${{ secrets.URL_TRANSFER_API }}
+  API_AUTH_TOKEN: ${{ secrets.API_AUTH_TOKEN }}
+  BRANCH_CODE: ${{ secrets.BRANCH_CODE }}
+  CLIENT_CORPORATE_CODE: ${{ secrets.CLIENT_CORPORATE_CODE }}
+  USER_ID: ${{ secrets.USER_ID }}
 
     steps:
       - name: Checkout code
