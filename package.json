@@ -10,7 +10,7 @@
     "report:cucumber": "start reports/cucumber-report.html",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",

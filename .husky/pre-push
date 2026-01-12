@@ -2,3 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npx playwright test
+
+echo "🔥 PRE-PUSH EJECUTÁNDOSE"
+sleep 2
