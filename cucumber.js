@@ -1,4 +1,4 @@
-module.exports = {
+export default  {
   default: {
     require: [
       'tests/ui/step-definitions/**/*.ts',

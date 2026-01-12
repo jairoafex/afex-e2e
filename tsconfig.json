@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES2021",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
+    "types": ["node", "playwright"],
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "types": ["node", "@playwright/test"],
-    "outDir": "dist"
+    "skipLibCheck": true
   },
-  "include": [
-    "playwright.config.ts",
-    "tests/**/*.ts"
-  ]
+  "include": ["**/*.ts"]
 }
