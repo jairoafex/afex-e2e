@@ -3,8 +3,6 @@ import {faker} from '@faker-js/faker'
 
   const startDate = '2026-01-10'
   const endDate = '2026-01-12'
-  const corporateCode ='1481947'
-  
 
 test("Transfer API - Obtener tasa de cambio", async ({ request }) => {
   const response = await request.get(
