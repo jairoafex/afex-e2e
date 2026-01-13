@@ -33,13 +33,9 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
 
-    # ✅ Variables de entorno a nivel de job
     env:
       URL_TRANSFER_API: ${{ secrets.URL_TRANSFER_API }}
       API_AUTH_TOKEN: ${{ secrets.API_AUTH_TOKEN }}
-      BRANCH_CODE: ${{ secrets.BRANCH_CODE }}
-      CLIENT_CORPORATE_CODE: ${{ secrets.CLIENT_CORPORATE_CODE }}
-      USER_ID: ${{ secrets.USER_ID }}
 
     steps:
       - name: Checkout code
@@ -56,15 +52,6 @@ jobs:
 
       - name: Install Playwright Browser (Chromium only)
         run: npx playwright install chromium
-
-      # 🔹 Debug: verifica que las variables de entorno lleguen correctamente
-      - name: Debug environment
-        run: |
-          echo "URL_TRANSFER_API: $URL_TRANSFER_API"
-          echo "API_AUTH_TOKEN: $API_AUTH_TOKEN"
-          echo "BRANCH_CODE: $BRANCH_CODE"
-          echo "CLIENT_CORPORATE_CODE: $CLIENT_CORPORATE_CODE"
-          echo "USER_ID: $USER_ID"
 
       - name: Run Playwright tests
         run: npx playwright test
