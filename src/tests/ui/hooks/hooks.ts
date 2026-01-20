@@ -1,4 +1,4 @@
-import { Before, After } from '@cucumber/cucumber';
+import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium, Browser, BrowserContext} from '@playwright/test';
 import * as dotenv from 'dotenv';
 
@@ -6,6 +6,8 @@ dotenv.config();
 
 let browser: Browser;
 let context: BrowserContext;
+
+setDefaultTimeout(30 * 1000);
 
 Before(async function () {
   browser = await chromium.launch({

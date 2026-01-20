@@ -3,11 +3,25 @@ import { FeelookupPage } from "../page/feelookupPage.js";
 import { AmountType, Currency, MethodPayment  } from "../../types/feelookup.types.js";
 
 let feelookupPage: FeelookupPage
-Given("Usuario inicia el navegador y valida cargue de AFEX+",async function() {
+Given("Usuario inicia el navegador y valida cargue de AFEX+",
+  async function() {
     feelookupPage = new FeelookupPage(this.page)
     await feelookupPage.expectFeelookupFormVisible()
    
 })
+
+When("Usuario ingresa el cliente {string}",
+  async function (client:string) {
+    await feelookupPage.typeClient(client)
+  }
+);
+
+Then(
+  'Usuario visualiza al cliente correctamente',
+  async function () {
+    await feelookupPage.clickOnClientFound()
+  }
+);
 
 Then('Usuario ingresa el pais {string}',
   async function(country:string) {
@@ -21,30 +35,40 @@ Then('Usuario selecciona el metodo de pago {string}',
 );
 
 Then('Usuario ingresa el monto a {string}',
-  async function (tipoMonto: AmountType) {
-    await feelookupPage.clickOnAmountType(tipoMonto)
+  async function (amountType: AmountType) {
+    await feelookupPage.clickOnAmountType(amountType)
   }
 );
 
 Then(
   'Usuario ingresa el monto aleatorio en moneda {string}',
-  async function (moneda: Currency) {
-    await feelookupPage.typeRandomAmount(moneda)
+  async function (currency: Currency) {
+    await feelookupPage.typeRandomAmount(currency)
   }
 );
 
-
-When('Usuario ingresa el cliente {string}',async function () {
-    // implementación pendiente
+Then(
+  'Usuario indica que cliente no presencial',
+  async function () {
+    await feelookupPage.clickOnClientNotPresent()
   }
 );
 
 When(
   'Usuario da click en Buscar Agentes',
   async function () {
-    // implementación pendiente
+    await feelookupPage.clickOnSearchQuotations()
   }
 );
+
+Then(
+  'Usuario visualiza el agente {string} el tipo transaccion {string} y selecciona la cotizacion',
+  async function (agent:string,method:MethodPayment) {
+    await feelookupPage.checkAgentQuotes()
+    await feelookupPage.selectAgentQuote(agent,method)
+  }
+);
+
 
 When(
   'Usuario da click en boton siguiente',
@@ -92,37 +116,10 @@ When(
    THEN
    ======================= */
 
-Then(
-  'Usuario visualiza al cliente correctamente',
-  async function () {
-    // implementación pendiente
-  }
-);
-
-Then(
-  'Usuario visualiza el formulario de cotizacion',
-  async function () {
-    // implementación pendiente
-  }
-);
 
 
 
 
-
-Then(
-  'Usuario indica que cliente no presencial',
-  async function () {
-    // implementación pendiente
-  }
-);
-
-Then(
-  'Usuario visualiza el agente {string} el tipo transaccion {string} y selecciona la cotizacion',
-  async function () {
-    // implementación pendiente
-  }
-);
 
 Then(
   'Usuario visualiza el formulario para seleccion de beneficiario',

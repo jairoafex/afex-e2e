@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { AntSelectHelpers } from "../../../utils/helpers/antSelect.helper.js";
+import { AfexModalHelper } from "../../../utils/helpers/afexModal.helper.js";
 import {
   AmountType,
   MethodPayment,
@@ -8,11 +9,14 @@ import {
 } from "../../types/feelookup.types.js";
 
 export class FeelookupPage {
+
+  private readonly afexModal: AfexModalHelper;
+  private antSelect: AntSelectHelpers;
+
   private readonly page: Page;
   private readonly feelookupForm: Locator;
   private readonly countryInput: Locator;
   private readonly cityInput: Locator;
-  private antSelect: AntSelectHelpers;
   private readonly methoPaymentAll: Locator;
   private readonly methodPaymentPickup: Locator;
   private readonly methodPaymentDeposit: Locator;
@@ -22,22 +26,37 @@ export class FeelookupPage {
   private readonly inputAmountToReceive: Locator;
   private readonly optionCurrencyClp: Locator;
   private readonly optionCurrencyUsd: Locator;
+  private readonly inputSearchClient: Locator;
+  private readonly textClientFound: Locator;
+  private readonly btnClientNotPresent: Locator;
+  private readonly btnClientRefuse: Locator;
+  private readonly btnSearchQuotations: Locator;
+  private readonly tableAgents: Locator;
+  private readonly tableAgentsRows:Locator;
 
   constructor(page: Page) {
     this.page = page;
+    this.antSelect = new AntSelectHelpers(page);
+    this.afexModal = new AfexModalHelper(page);
     this.feelookupForm = page.getByRole("link", { name: "Cotizar un envío" });
     this.countryInput = page.getByRole("combobox", {name: "* País de destino",});
     this.cityInput = page.getByRole("combobox", { name: "* Ciudad" });
-    this.antSelect = new AntSelectHelpers(page);
-    this.methoPaymentAll = page.locator('label').filter({hasText:'Todos'})
-    this.methodPaymentDeposit = page.locator('label').filter({hasText:'Depósito'})
-    this.methodPaymentPickup = page.locator('label').filter({hasText:'Efectivo'})
+    this.methoPaymentAll = page.locator("label").filter({ hasText: "Todos" });
+    this.methodPaymentDeposit = page.locator("label").filter({ hasText: "Depósito" });
+    this.methodPaymentPickup = page.locator("label").filter({ hasText: "Efectivo" });
     this.amountToSend = page.getByText("Monto a enviar");
     this.amounttoReceive = page.getByText("Monto a recibir");
     this.inputAmountToSend = page.locator("//input[contains(@id,'form_item_amount')]");
     this.inputAmountToReceive = page.locator("//input[@id='form_item_receiveAmount']");
     this.optionCurrencyClp = page.locator("//span[contains(.,'CLP')]");
     this.optionCurrencyUsd = page.locator("(//span[contains(.,'USD')])[2]");
+    this.inputSearchClient = page.locator("//input[contains(@placeholder,'Buscar..')]");
+    this.textClientFound = page.locator("//span[contains(@class,'client-name')]");
+    this.btnClientNotPresent = page.getByTestId("noPresentialClientButton");
+    this.btnClientRefuse = page.getByTestId("rejectFingerprintClientButton");
+    this.btnSearchQuotations = page.locator("//span[contains(.,'Buscar')]");
+    this.tableAgents = page.locator("div.ant-table-content tbody.ant-table-tbody");
+    this.tableAgentsRows= page.locator("tbody.ant-table-tbody tr")
   }
 
   async expectFeelookupFormVisible() {
@@ -131,5 +150,58 @@ export class FeelookupPage {
     };
 
     await actions[currency].fill(currency);
+  }
+
+  async typeClient(client: string) {
+    await this.inputSearchClient.fill(client);
+    await this.inputSearchClient.press("Enter");
+  }
+
+  async clickOnClientFound() {
+    await this.textClientFound.click();
+  }
+  async clickOnClientNotPresent() {
+    await this.btnClientNotPresent.click();
+  }
+  async clickOnClientRefuse() {
+    await this.btnClientRefuse.click();
+  }
+  async clickOnSearchQuotations() {
+    await this.btnSearchQuotations.click();
+  }
+  async checkAgentQuotes() {
+    try {
+      await expect(this.tableAgents).toBeVisible({ timeout: 15_000 });
+    } catch {
+      throw new Error("No se encontraron cotizaciones disponibles");
+    }
+  }
+   async selectAgentQuote(
+    agent: string,
+    transaction: MethodPayment
+  ): Promise<void> {
+    // Espera a que la tabla tenga filas
+    await expect(this.tableAgentsRows.first()).toBeVisible({ timeout: 15_000 });
+    const rowCount = await this.tableAgentsRows.count();
+
+    for (let i = 0; i < rowCount; i++) {
+      const row = this.tableAgentsRows.nth(i);
+      const rowText = await row.innerText();
+
+      if (rowText.includes(agent) && rowText.includes(transaction)) {
+        const radio = row.locator('input.ant-radio-input');
+        const radioWrapper = row.locator('label.ant-radio-wrapper');
+        await radioWrapper.click();
+        await expect(radio).toBeChecked();
+        if (await this.afexModal.isVisible()) {
+          await this.afexModal.closeIfVisible();
+        }
+        return;
+      }
+    }
+
+    throw new Error(
+      `Cotización no disponible para agente: ${agent} y transacción: ${transaction}`
+    );
   }
 }
