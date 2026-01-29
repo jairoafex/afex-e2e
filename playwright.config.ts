@@ -1,22 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config';
 
-//const __filename = fileURLToPath(import.meta.url);
-//const __dirname = path.dirname(__filename);
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-
-
-//dotenv.config({ path: path.resolve(__dirname, '.env') });
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
-
-
-
 export default defineConfig({
   testDir: 'src/tests',
   timeout:50_000,
@@ -36,7 +20,8 @@ export default defineConfig({
   use: {
      baseURL: process.env.BASE_URL,
      trace: 'on-first-retry',
-     testIdAttribute:'data-testid'
+     testIdAttribute:'data-testid',
+     headless:true
   },
 
   /* Configure projects for major browsers */
