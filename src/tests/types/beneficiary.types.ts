@@ -1,0 +1,7 @@
+export type IdentificationType= 'CARNET DE EXTRANJERIA'|'CEDULA DE CIUDADANIA'|'PASAPORTE'|'RUT'|'DNI'|'RUC'
+export type AccountType = 'CUENTA AHORRO'|'CUENTA CORRIENTE'
+export type BeneficiaryRelationship='Madre'|'Hijo'|'Hermano'|'Amigo'|'Hijo'
+export type FundsSource='Salario'|'Ahorros'|'Negocios'
+export type Purpose = 'Salario'|'Regalo'|'Impuestos'
+export type DepositCurrency ='MONEDA LOCAL'
+export type BeneficiaryType='PERSONA'|'EMPRESA'
