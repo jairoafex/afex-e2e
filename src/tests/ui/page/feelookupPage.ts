@@ -1,6 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { AntSelectHelpers } from "../../../utils/helpers/antSelect.helper.js";
 import { AfexModalHelper } from "../../../utils/helpers/afexModal.helper.js";
+import { TEST_TIMEOUTS } from "../../../utils/constants/timeouts.js";
 import {
   AmountType,
   MethodPayment,
@@ -11,8 +12,7 @@ import {
 export class FeelookupPage {
 
   private readonly afexModal: AfexModalHelper;
-  private antSelect: AntSelectHelpers;
-
+  private readonly antSelect: AntSelectHelpers;
   private readonly page: Page;
   private readonly feelookupForm: Locator;
   private readonly countryInput: Locator;
@@ -33,6 +33,7 @@ export class FeelookupPage {
   private readonly btnSearchQuotations: Locator;
   private readonly tableAgents: Locator;
   private readonly tableAgentsRows:Locator;
+  private readonly btnNext:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -57,6 +58,7 @@ export class FeelookupPage {
     this.btnSearchQuotations = page.locator("//span[contains(.,'Buscar')]");
     this.tableAgents = page.locator("div.ant-table-content tbody.ant-table-tbody");
     this.tableAgentsRows= page.locator("tbody.ant-table-tbody tr")
+    this.btnNext= page.getByTestId('vnavigator-next')
   }
 
   async expectFeelookupFormVisible() {
@@ -64,6 +66,8 @@ export class FeelookupPage {
   }
 
   async typeCountry(country: string) {
+    await this.countryInput.waitFor({ state: 'attached', timeout: TEST_TIMEOUTS.ELEMENT_ATTACHED });
+    await this.countryInput.click();
     await this.countryInput.fill(country);
     await this.antSelect.selectByText(country);
   }
@@ -153,6 +157,8 @@ export class FeelookupPage {
   }
 
   async typeClient(client: string) {
+    await this.inputSearchClient.waitFor({ state: 'attached', timeout: TEST_TIMEOUTS.ELEMENT_ATTACHED });
+    await this.inputSearchClient.click();
     await this.inputSearchClient.fill(client);
     await this.inputSearchClient.press("Enter");
   }
@@ -171,7 +177,7 @@ export class FeelookupPage {
   }
   async checkAgentQuotes() {
     try {
-      await expect(this.tableAgents).toBeVisible({ timeout: 15_000 });
+      await expect(this.tableAgents).toBeVisible({ timeout: TEST_TIMEOUTS.NORMAL_OPERATION });
     } catch {
       throw new Error("No se encontraron cotizaciones disponibles");
     }
@@ -181,7 +187,7 @@ export class FeelookupPage {
     transaction: MethodPayment
   ): Promise<void> {
     // Espera a que la tabla tenga filas
-    await expect(this.tableAgentsRows.first()).toBeVisible({ timeout: 15_000 });
+    await expect(this.tableAgentsRows.first()).toBeVisible({ timeout: TEST_TIMEOUTS.NORMAL_OPERATION });
     const rowCount = await this.tableAgentsRows.count();
 
     for (let i = 0; i < rowCount; i++) {
@@ -203,5 +209,8 @@ export class FeelookupPage {
     throw new Error(
       `Cotización no disponible para agente: ${agent} y transacción: ${transaction}`
     );
+  }
+  async clickOnBtnNext(){
+   await this.btnNext.click()
   }
 }

@@ -1,13 +1,14 @@
 import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium, Browser, BrowserContext} from '@playwright/test';
 import * as dotenv from 'dotenv';
+import { TEST_TIMEOUTS } from '../../../utils/constants/timeouts.js';
 
 dotenv.config();
 
 let browser: Browser;
 let context: BrowserContext;
 
-setDefaultTimeout(30 * 1000);
+setDefaultTimeout(TEST_TIMEOUTS.CUCUMBER_STEP);
 
 Before(async function () {
   browser = await chromium.launch({
@@ -26,7 +27,17 @@ Before(async function () {
 });
 
 After(async function () {
-  await this.page.close();
-  await context.close();
-  await browser.close();
+  try {
+    if (this.page && !this.page.isClosed()) {
+      await this.page.close();
+    }
+    if (context) {
+      await context.close();
+    }
+    if (browser) {
+      await browser.close();
+    }
+  } catch (error) {
+    console.error('Error closing browser:', error);
+  }
 });
