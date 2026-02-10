@@ -111,9 +111,23 @@ Then(
 );
 
 Then(
+  'Usuario ingresa el nombre del beneficiario {string}',
+  async function (name:string) {
+    await beneficaryPage.typeRealBeneficiaryName(name)
+  }
+);
+
+Then(
   'Usuario ingresa el apellido del beneficiario',
   async function () {
     await beneficaryPage.typeBeneficiarySurname()
+  }
+);
+
+Then(
+  'Usuario ingresa el apellido del beneficiario {string}',
+  async function (surname:string) {
+    await beneficaryPage.typeRealBeneficiarySurname(surname)
   }
 );
 
@@ -129,6 +143,20 @@ Then(
   async function (accountNumber:string) {
     await beneficaryPage.typeAccountNumber(accountNumber)
     
+  }
+);
+
+Then(
+  'Usuario ingresa el nombre del proposito {string}',
+  async function (purpose:string){
+    await beneficaryPage.typePurpose(purpose)
+  }
+)
+
+Then(
+  'Usuario ingresa el telefono del beneficiario {string}',
+  async function (phoneNumber:string) {
+    await beneficaryPage.typeBeneficiaryPhone(phoneNumber)
   }
 );
 
@@ -203,3 +231,8 @@ Then(
     expect(payingAgent.toLowerCase()).toContain(agentName.toLowerCase());
   }
 );
+Then('Usuario ingresa el codigo de promocode {string}',
+  async function(promocode:string){
+    await feelookupPage.typePromocode(promocode)
+  })
+

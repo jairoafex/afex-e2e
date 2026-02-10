@@ -10,8 +10,13 @@ module.exports = {
 
     format: [
       'progress',
-      'html:reports/cucumber-report.html'
+      'html:reports/cucumber-report.html',
+      'allure-cucumberjs/reporter'
     ],
+
+    formatOptions: {
+      resultsDir: 'allure-results'
+    },
 
     paths: ['src/tests/ui/features/**/*.feature'],
     publishQuiet: true

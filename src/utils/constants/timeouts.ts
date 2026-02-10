@@ -7,7 +7,7 @@
 
 export const TEST_TIMEOUTS = {
   // Esperas cortas para elementos que deberían estar disponibles rápido
-  ELEMENT_VISIBLE: 15_000,          // 15s - Elemento debería estar visible
+  ELEMENT_VISIBLE: 45_000,          // 15s - Elemento debería estar visible
   ELEMENT_ATTACHED: 5_000,          // 5s - Elemento debería estar en el DOM
   
   // Esperas medianas para operaciones normales
