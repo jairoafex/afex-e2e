@@ -24,6 +24,7 @@ export class FeelookupPage {
   private readonly amounttoReceive: Locator;
   private readonly inputAmountToSend: Locator;
   private readonly inputAmountToReceive: Locator;
+  private readonly inputPromocode: Locator;
   private readonly optionCurrencyClp: Locator;
   private readonly optionCurrencyUsd: Locator;
   private readonly inputSearchClient: Locator;
@@ -48,7 +49,8 @@ export class FeelookupPage {
     this.amountToSend = page.getByText("Monto a enviar");
     this.amounttoReceive = page.getByText("Monto a recibir");
     this.inputAmountToSend = page.locator("//input[contains(@id,'form_item_amount')]");
-    this.inputAmountToReceive = page.locator("//input[@id='form_item_receiveAmount']");
+    this.inputAmountToReceive = page.locator("//input[contains(@id,'form_item_receiveAmount')]");
+    this.inputPromocode = page.getByRole('textbox', { name: 'Promocode' })
     this.optionCurrencyClp = page.locator("//span[contains(.,'CLP')]");
     this.optionCurrencyUsd = page.locator("(//span[contains(.,'USD')])[2]");
     this.inputSearchClient = page.locator("//input[contains(@placeholder,'Buscar..')]");
@@ -122,6 +124,9 @@ export class FeelookupPage {
   }
   async typeAmountToReceive(amount: string) {
     await this.inputAmountToReceive.fill(amount);
+  }
+  async typePromocode(code: string){
+    await this.inputPromocode.fill(code)
   }
 
   async typeRandomAmount(currency: Currency): Promise<void> {

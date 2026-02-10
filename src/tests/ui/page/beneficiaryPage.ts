@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from "@playwright/test";
-import { faker } from "@faker-js/faker";
+import { faker as fakerES } from "@faker-js/faker";
 import { TEST_TIMEOUTS } from "../../../utils/constants/timeouts.js";
 import {
   AccountType,
@@ -7,6 +7,7 @@ import {
 } from "../../types/beneficiary.types.js";
 import { AntSelectHelpers } from "../../../utils/helpers/antSelect.helper.js";
 import { AfexModalHelper } from "../../../utils/helpers/afexModal.helper.js";
+
 
 export class BeneficiaryPage {
   private readonly antSelect: AntSelectHelpers;
@@ -24,6 +25,7 @@ export class BeneficiaryPage {
   private readonly inputAccountNumber: Locator;
   private readonly dropdownAccountType: Locator;
   private readonly inputBankName: Locator;
+  private readonly inputPurpose: Locator;
   private readonly btnContinue: Locator;
   private readonly summaryTransferContainer: Locator;
 
@@ -41,6 +43,7 @@ export class BeneficiaryPage {
     this.inputBeneficiaryPhone = page.locator("//input[contains(@id,'form_item_recipientPhone')]");
     this.inputAccountNumber = page.locator("//input[contains(@id,'form_item_receiverAccountNumber')]");
     this.dropdownAccountType = page.locator("//input[@id='form_item_accountType' or @id='form_item_receiverAccountType']");
+    this.inputPurpose= page.getByRole('textbox', { name: '* Propósito de la transacción' })
     this.inputBankName = page.getByRole("combobox", { name: "* Banco" });
     this.btnContinue = page.locator("(//span[contains(.,'Continuar')])[1]");
     this.summaryTransferContainer = page.locator(".summary-container");
@@ -55,11 +58,19 @@ export class BeneficiaryPage {
   }
 
   async typeBeneficiaryName(): Promise<void> {
-    await this.inputBeneficiaryName.fill(faker.person.firstName());
+    await this.inputBeneficiaryName.fill(fakerES.person.firstName());
+  }
+
+  async typeRealBeneficiaryName(name:string): Promise<void> {
+    await this.inputBeneficiaryName.fill(name);
   }
 
   async typeBeneficiarySurname(): Promise<void> {
-    await this.inputBeneficiarySurname.fill(faker.person.lastName());
+    await this.inputBeneficiarySurname.fill(fakerES.person.lastName());
+  }
+
+  async typeRealBeneficiarySurname(surname:string): Promise<void> {
+    await this.inputBeneficiarySurname.fill(surname);
   }
 
   async typeBeneficiaryIdentification(identification: string): Promise<void> {
@@ -72,6 +83,10 @@ export class BeneficiaryPage {
     await this.antSelect.selectByText(type);
   }
 
+  async typeBeneficiaryPhone(phone: string): Promise<void> {
+    await this.inputBeneficiaryPhone.fill(phone);
+  }
+
   async typeAccountType(accountType: AccountType): Promise<void> {
     await this.dropdownAccountType.waitFor({ state: 'attached', timeout: TEST_TIMEOUTS.ELEMENT_ATTACHED });
     await this.dropdownAccountType.click();
@@ -80,6 +95,10 @@ export class BeneficiaryPage {
 
   async typeAccountNumber(accountNumber: string): Promise<void> {
     await this.inputAccountNumber.fill(accountNumber);
+  }
+
+  async typePurpose(purpose:string): Promise<void>{
+    await this.inputPurpose.fill(purpose);
   }
 
   async clickOnContinue(): Promise<void> {

@@ -58,7 +58,7 @@ async expectCollectingModalVisisble(): Promise<void> {
 
 async expectSummaryModalVisible(): Promise<void> {
     await this.afexModal.summaryModalIsVisible();
-    await expect(this.h3transferSuccess).toBeVisible({timeout:30_000});
+    await expect(this.h3transferSuccess).toBeVisible({timeout:TEST_TIMEOUTS.ELEMENT_VISIBLE});
 }
 
 async clickOnBtnConfirmInModal(): Promise<void> {

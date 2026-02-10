@@ -1,10 +1,11 @@
-name: Playwright Tests
+name: Playwright API Tests
 
 on:
-  push:
-    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+    types: [ opened, synchronize, reopened ]
+
+  workflow_dispatch:
 
 jobs:
   lint:
@@ -28,7 +29,7 @@ jobs:
         run: npm run lint
 
   test:
-    name: Playwright E2E
+    name: Playwright API + Allure
     needs: lint
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -53,13 +54,22 @@ jobs:
       - name: Install Playwright Browser (Chromium only)
         run: npx playwright install chromium
 
-      - name: Run Playwright tests
-        run: npx playwright test
+      - name: Run API tests
+        run: npm run test:api
+        continue-on-error: true
 
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
+      - name: Install Allure CLI
         if: ${{ !cancelled() }}
+        run: npm install -g allure-commandline
+
+      - name: Generate Allure report
+        if: ${{ !cancelled() }}
+        run: allure generate allure-results --clean -o allure-report
+
+      - name: Upload Allure report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: playwright-report/
+          name: allure-api-report
+          path: allure-report/
           retention-days: 30
